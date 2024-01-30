@@ -1,4 +1,4 @@
-n = int(input())
+"""n = int(input())
 
 lista = []
 for i in range(n):
@@ -27,3 +27,15 @@ for i in range(n):
 
 for i in lista:
     print(i)
+
+"""
+
+#solução 2 - melhorarada
+n = int(input())
+
+lista = [input() for _ in range(n)]
+
+lista.sort(key=lambda x: (len(x), x))
+
+for item in lista:
+    print(item)
