@@ -22,3 +22,16 @@ for index, j in enumerate(pares):
         print(j, end = " ")
     else:
         print(j)
+
+
+#versão melhorada
+
+n = int(input())
+lista = list(map(int, input().split()))
+
+impares = sorted([i for i in lista if i % 2 != 0])
+pares = sorted([i for i in lista if i % 2 == 0])
+
+print(" ".join(map(str, impares)), end=" ")
+
+print(" ".join(map(str, pares)))
