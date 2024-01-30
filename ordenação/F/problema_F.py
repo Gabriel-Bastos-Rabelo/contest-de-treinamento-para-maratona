@@ -1,4 +1,4 @@
-n = int(input())
+"""n = int(input())
 
 lista = []
 
@@ -32,4 +32,24 @@ for i in range(n):
 
 
 for i in lista:
+    print(i[0])"""
+
+
+
+
+
+n = int(input())
+lista = []
+
+for i in range(n):
+    k = list(map(str, input().split(",")))
+    k[1] = int(k[1])
+    lista.append(k)
+
+
+lista.sort(key=lambda x: (-x[1], x[0]))
+
+for i in lista:
     print(i[0])
+
+
