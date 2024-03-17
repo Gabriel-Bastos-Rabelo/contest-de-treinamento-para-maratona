@@ -1,39 +1,49 @@
-def fluxo_maximo(grafo, fonte, destino):
-    # Encontrar um caminho de aumento
-    def encontrar_caminho(capacidade_residual, u, v):
-        if u == destino:
-            return v
-        for vizinho in grafo[u]:
-            if capacidade_residual[u][vizinho] > 0:
-                caminho = encontrar_caminho(capacidade_residual, vizinho, v)
-                if caminho is not None:
-                    return [u] + caminho
-        return None
+def ford_fulkerson(graph, source, sink):
+    parent = [-1] * len(graph)
+    max_flow = 0
 
-    # Algoritmo de Ford-Fulkerson
-    fluxo = 0
-    capacidade_residual = grafo.copy()
-    while True:
-        caminho = encontrar_caminho(capacidade_residual, fonte, destino)
-        if caminho is None:
-            break
-        capacidade_minima = min(capacidade_residual[u][v] for u, v in zip(caminho[:-1], caminho[1:]))
-        for u, v in zip(caminho[:-1], caminho[1:]):
-            capacidade_residual[u][v] -= capacidade_minima
-            capacidade_residual[v][u] += capacidade_minima
-        fluxo += capacidade_minima
-    return fluxo
+    def bfs(residual_graph):
+        visited = [False] * len(residual_graph)
+        queue = []
+        queue.append(source)
+        visited[source] = True
 
-# Leitura da entrada
+        while queue:
+            u = queue.pop(0)
+
+            for ind, val in enumerate(residual_graph[u]):
+                if visited[ind] == False and val > 0:
+                    queue.append(ind)
+                    visited[ind] = True
+                    parent[ind] = u
+        return visited[sink]
+
+    while bfs(graph):
+        path_flow = float("Inf")
+        s = sink
+
+        while (s != source):
+            path_flow = min(path_flow, graph[parent[s]][s])
+            s = parent[s]
+
+        max_flow += path_flow
+        v = sink
+        while (v != source):
+            u = parent[v]
+            graph[u][v] -= path_flow
+           
+            v = parent[v]
+
+    return max_flow
+
+
 n, m = map(int, input().split())
-grafo = [[] for _ in range(n + 1)]
-for _ in range(m):
-    x, y, p = map(int, input().split())
-    grafo[x].append(y)
-    grafo[y].append(x)
 
-# Cálculo do fluxo máximo
-resultado = fluxo_maximo(grafo, 1, n)
+graph = [[0 for j in range(n+1)] for i in range(n+1)]
 
-# Impressão da saída
-print(resultado)
+for i in range(m):
+    a, b, c = map(int, input().split())
+    graph[a][b] = c
+
+
+print(ford_fulkerson(graph, 1, n))
